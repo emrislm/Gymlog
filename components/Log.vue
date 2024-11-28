@@ -1,19 +1,20 @@
 <template>
-  <Card v-if="logs.length > 0" v-for="log in logs" class="border"
-    :style="{ borderColor: `color-mix(in srgb, ${log.expand.exercise.expand.body_part.color} 50%, black)` }"
-    :key="log.id">
+  <Card v-if="logs.length > 0" v-for="log in logs" class="border cursor-pointer hover:transition-colors duration-200"
+    :style="{
+      borderColor: `color-mix(in srgb, ${log.expand.exercise.expand.body_part.color} 50%, black)`,
+      '--hover-color': `color-mix(in srgb, ${log.expand.exercise.expand.body_part.color} 20%, black)`,
+    }" :class="['hover:!bg-[var(--hover-color)]']" :key="log.id" @click="handleDeleteLog(log.id)">
     <template #title>
-      <div class="flex justify-between">
-        <span>{{ log.expand.exercise.name }}</span>
+      <div class="flex justify-between mb-2">
+        <span class="truncate mr-2">{{ log.expand.exercise.name }}</span>
         <Tag :value="log.expand.exercise.expand.body_part.name"
           :style="{ backgroundColor: log.expand.exercise.expand.body_part.color, height: 'min-content' }" rounded />
       </div>
     </template>
-    <template #subtitle>{{ format(new Date(log.date), 'dd-MM-yyyy') }}</template>
     <template #content>
       <div class="flex flex-col gap-2">
         <div class="flex justify-between">
-          <span>Weight</span>
+          <span>Gewicht</span>
           <span>{{ log.weight }} kg</span>
         </div>
         <div class="flex justify-between">
@@ -30,14 +31,39 @@
   <div v-else class="flex justify-center">
     <span class="text-lg font-semibold">Geen loggen gevonden voor deze dag</span>
   </div>
+
+  <DialogsDelete :visible="showConfirmDeleteLog" @update:visible="showConfirmDeleteLog = $event"
+    @confirmDeleteLog="confirmDeleteLog" />
 </template>
 
 <script setup lang="ts">
-import { format } from 'date-fns';
-
 defineProps<{
   logs: any[];
 }>();
 
+const emit = defineEmits<{
+  'refresh-logs': [];
+}>();
 
+const { pb, getLogs, deleteLog } = await usePB();
+
+const showConfirmDeleteLog = ref(false);
+let selectedLogId = ref<string | null>(null);
+
+const handleDeleteLog = (logId: string) => {
+  selectedLogId.value = logId;
+  showConfirmDeleteLog.value = true;
+};
+
+const confirmDeleteLog = async () => {
+  if (selectedLogId.value) {
+    console.log('Deleting log', selectedLogId.value);
+
+    await deleteLog(selectedLogId.value);
+    emit('refresh-logs');
+
+    showConfirmDeleteLog.value = false;
+    selectedLogId.value = null;
+  }
+};
 </script>
