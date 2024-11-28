@@ -36,7 +36,7 @@
 definePageMeta({
   layout: false,
 });
-const { login } = await useAuth();
+const { login } = await usePB();
 
 const email = ref("");
 const password = ref('');

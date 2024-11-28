@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-const { pb } = await useAuth();
+const { pb } = await usePB();
 
 const mrprs = await pb.collection("personal_records").getFullList();
 console.log("mrprs", mrprs);

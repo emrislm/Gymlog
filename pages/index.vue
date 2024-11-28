@@ -7,47 +7,16 @@
       <DatePicker v-model="filterDate" size="small" showButtonBar dateFormat="dd/mm/yy" />
       <Button label="Nieuwe sessie" @click="showNewLog = true" />
     </div>
-    <div v-if="!isLoading" class="grid grid-cols-1 gap-1 sm:grid-cols-3 sm:gap-3">
-      <Log :logs="filteredLogs" />
+    <div v-if="!isLoading" class="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <Log :logs="filteredLogs" @refresh-logs="getUserLogs" />
     </div>
     <div v-else class="card flex justify-center">
       <ProgressSpinner style="width: 50px; height: 50px" strokeWidth="8" fill="transparent" animationDuration=".5s" />
     </div>
 
-    <Dialog v-model:visible="showNewLog" modal header="Voeg een log toe"
-      :style="{ minwidth: '25rem', maxWidth: '100%' }">
-      <div class="flex items-center gap-4 mb-4">
-        <label for="exercise" class="font-semibold w-24">Oefening</label>
-
-        <Select v-model="selectedExercise" :options="exercises" optionLabel="label" optionGroupLabel="label"
-          optionGroupChildren="items" placeholder="Kies een oefening" class="w-full md:w-56">
-          <template #optiongroup="slotProps">
-            <div class="flex items-center">
-              <div>{{ slotProps.option.label }}</div>
-            </div>
-          </template>
-        </Select>
-      </div>
-      <div class="flex items-center gap-4 mb-4">
-        <label for="weight" class="font-semibold w-24">Gewicht</label>
-        <InputNumber v-model="newLogObject.weight" suffix=" kg" inputId="weight" size="small" :min="0" :max="1000"
-          :useGrouping="false" fluid />
-      </div>
-      <div class="flex items-center gap-4 mb-4">
-        <label for="sets" class="font-semibold w-24">Sets</label>
-        <InputNumber v-model="newLogObject.sets" inputId="sets" size="small" :min="0" :max="1000" :useGrouping="false"
-          fluid />
-      </div>
-      <div class="flex items-center gap-4 mb-8">
-        <label for="reps" class="font-semibold w-24">Reps</label>
-        <InputNumber v-model="newLogObject.reps" inputId="reps" size="small" :min="0" :max="1000" :useGrouping="false"
-          fluid />
-      </div>
-      <div class="flex justify-end gap-2">
-        <Button type="button" label="Annuleer" severity="secondary" @click="showNewLog = false" size="small" />
-        <Button type="button" label="Opslaan" @click="saveLog" size="small" />
-      </div>
-    </Dialog>
+    <DialogsAddLog :visible="showNewLog" @update:visible="showNewLog = $event" :exercises="exercises"
+      :selected-exercise="selectedExercise" @update:selected-exercise="selectedExercise = $event"
+      :log-object="newLogObject" @update:log-object="newLogObject = $event" @save="saveLog" />
   </div>
 </template>
 
@@ -56,7 +25,7 @@
 import type { Log } from '@/types/types';
 
 /* CONSTANTS */
-const { pb, addLog } = await useAuth();
+const { pb, getLogs, addLog, getExercises } = await usePB();
 const isLoading = ref(true);
 const logs = ref<any[]>([]);
 const showNewLog = ref(false);
@@ -90,52 +59,44 @@ const filteredLogs = computed(() => {
 });
 
 /* FUNCTIONS */
-const getLogs = async () => {
-  const records = await pb.collection('logs').getFullList({
-    sort: '-date',
-    expand: 'exercise.body_part',
-    filter: `user = "${pb.authStore.record?.id}"`
-    /* filter: `user = "${user.value.id}"` */
-  });
-
-  logs.value = records as Log[];
-  isLoading.value = false;
+const getUserLogs = async () => {
+  isLoading.value = true;
+  const logsResult = await getLogs(pb.authStore.record?.id || '');
+  if (logsResult.success) {
+    logs.value = logsResult.data;
+    isLoading.value = false;
+  }
+  else console.error(logsResult.error);
 };
 
-const getExercises = async () => {
-  const records = await pb.collection('exercises').getFullList({
-    sort: '-created',
-    expand: 'body_part'
-  });
-
-  const transformed = Object.values(
-    records.reduce((acc: Record<string, { label: string; items: { label: string; value: string }[] }>, obj) => {
-      const bodyPartName = obj.expand?.body_part.name;
-      if (!acc[bodyPartName]) {
-        acc[bodyPartName] = {
-          label: bodyPartName,
-          items: []
-        };
-      }
-      acc[bodyPartName].items.push({ label: obj.name, value: obj.id });
-      return acc;
-    }, {})
-  );
-
-  exercises.value = transformed;
+const getAllExercises = async () => {
+  const exercisesResult = await getExercises();
+  if (exercisesResult.success) {
+    exercises.value = exercisesResult.data;
+  } else console.error(exercisesResult.error);
 };
 
 const saveLog = async () => {
   newLogObject.value.exercise = selectedExercise.value.value;
+
   await addLog(newLogObject.value);
-  await getLogs();
+  await getUserLogs();
+
   showNewLog.value = false;
   selectedExercise.value = {};
+  newLogObject.value = {
+    date: new Date().toISOString().toString(),
+    exercise: '',
+    reps: 0,
+    sets: 0,
+    user: pb.authStore.record?.id || '',
+    weight: 0
+  };
 };
 
 const init = async () => {
-  await getLogs();
-  await getExercises();
+  await getUserLogs();
+  await getAllExercises();
 };
 
 init();

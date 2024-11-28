@@ -49,7 +49,7 @@
 definePageMeta({
   layout: false,
 });
-const { register } = await useAuth();
+const { register } = await usePB();
 
 const name = ref('');
 const email = ref('');

@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-const { logout, user, pb } = await useAuth();
+const { logout, user, pb } = await usePB();
 
 const items = ref<any[]>([
   {
