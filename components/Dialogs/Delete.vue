@@ -6,7 +6,7 @@
     </div>
     <div class="flex justify-end gap-2">
       <Button label="Nee" severity="secondary" @click="close" />
-      <Button label="Ja" @click="onConfirm" severity="danger" />
+      <Button label="Verwijder" @click="onConfirm" severity="danger" />
     </div>
   </Dialog>
 </template>
