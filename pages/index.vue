@@ -4,7 +4,16 @@
       <h1 class="text-2xl font-bold">Mijn sessies</h1>
     </div>
     <div class="flex justify-between items-center mb-4">
-      <DatePicker v-model="filterDate" size="small" showButtonBar dateFormat="dd/mm/yy" />
+      <DatePicker v-model="filterDate" size="small" showButtonBar dateFormat="dd/mm/yy">
+        <template #date="slotProps">
+          <strong
+            v-if="logs.some(log => isSameDay(new Date(log.date), new Date(slotProps.date.year, slotProps.date.month, slotProps.date.day)))"
+            style="color: cyan;">
+            {{ slotProps.date.day }}
+          </strong>
+          <template v-else>{{ slotProps.date.day }}</template>
+        </template>
+      </DatePicker>
       <Button label="Nieuwe sessie" @click="showNewLog = true" />
     </div>
     <div v-if="!isLoading" class="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
@@ -92,6 +101,12 @@ const saveLog = async () => {
     user: pb.authStore.record?.id || '',
     weight: 0
   };
+};
+
+const isSameDay = (date1: Date, date2: Date) => {
+  return date1.getFullYear() === date2.getFullYear() &&
+    date1.getMonth() === date2.getMonth() &&
+    date1.getDate() === date2.getDate();
 };
 
 const init = async () => {
