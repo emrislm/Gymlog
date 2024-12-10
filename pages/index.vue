@@ -1,7 +1,7 @@
 <template>
   <div class="py-4">
     <div class="flex justify-between items-center mb-4">
-      <h1 class="text-2xl font-bold">Mijn sessies</h1>
+      <h1 class="text-2xl font-bold">Mijn logs</h1>
     </div>
     <div class="flex justify-between items-center mb-4">
       <DatePicker v-model="filterDate" size="small" showButtonBar dateFormat="dd/mm/yy">
@@ -14,7 +14,7 @@
           <template v-else>{{ slotProps.date.day }}</template>
         </template>
       </DatePicker>
-      <Button label="Nieuwe sessie" @click="showNewLog = true" />
+      <Button label="Nieuwe log" @click="showNewLog = true" />
     </div>
     <div v-if="!isLoading" class="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       <Log :logs="filteredLogs" @refresh-logs="getUserLogs" />
