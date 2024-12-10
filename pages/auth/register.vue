@@ -5,34 +5,44 @@
         <h1 class="text-2xl font-bold text-center">Register</h1>
       </template>
       <template #content>
-        <form @submit.prevent="handleRegister" class="space-y-4">
+        <form @submit.prevent="handleRegister" class="space-y-4 mt-4">
           <div class="flex flex-col gap-2">
-            <label for="name">Naam</label>
-            <InputText id="name" v-model="name" class="w-full" :class="{ 'p-invalid': errors.name }" />
+            <FloatLabel>
+              <InputText id="name" v-model="name" class="w-full" :class="{ 'p-invalid': errors.name }" />
+              <label for="name">Naam</label>
+            </FloatLabel>
             <small class="text-red-500">{{ errors.name }}</small>
           </div>
 
           <div class="flex flex-col gap-2">
-            <label for="email">Email</label>
-            <InputText id="email" v-model="email" type="email" class="w-full" :class="{ 'p-invalid': errors.email }" />
+            <FloatLabel>
+              <InputText id="email" v-model="email" type="email" class="w-full"
+                :class="{ 'p-invalid': errors.email }" />
+              <label for="email">Email</label>
+            </FloatLabel>
             <small class="text-red-500">{{ errors.email }}</small>
           </div>
 
           <div class="flex flex-col gap-2">
-            <label for="password">Wachtwoord</label>
-            <Password v-model="password" :feedback="false" class="w-full" :class="{ 'p-invalid': errors.password }" />
+            <FloatLabel>
+              <Password v-model="password" :feedback="false" class="w-full" :class="{ 'p-invalid': errors.password }"
+                toggle-mask fluid />
+              <label for="password">Wachtwoord</label>
+            </FloatLabel>
             <small class="text-red-500">{{ errors.password }}</small>
           </div>
 
           <div class="flex flex-col gap-2">
-            <label for="passwordConfirm">Wachtwoord bevestiging</label>
-            <Password v-model="passwordConfirm" :feedback="false" class="w-full"
-              :class="{ 'p-invalid': errors.passwordConfirm }" />
+            <FloatLabel>
+              <Password v-model="passwordConfirm" :feedback="false" class="w-full"
+                :class="{ 'p-invalid': errors.passwordConfirm }" toggle-mask fluid />
+              <label for="passwordConfirm">Wachtwoord bevestiging</label>
+            </FloatLabel>
             <small class="text-red-500">{{ errors.passwordConfirm }}</small>
           </div>
 
           <div class="flex flex-col gap-4">
-            <Button type="submit" label="Register" class="w-full" />
+            <Button type="submit" label="Registreer" class="w-full" />
             <div class="text-center">
               <NuxtLink to="/auth/login" class="text-blue-500 hover:underline">
                 Heb je al een account? Login

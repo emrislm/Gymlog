@@ -5,16 +5,22 @@
         <h1 class="text-2xl font-bold text-center">Login</h1>
       </template>
       <template #content>
-        <form @submit.prevent="handleLogin" class="space-y-4">
-          <div class="flex flex-col gap-2">
-            <label for="email">Email</label>
-            <InputText id="email" v-model="email" type="email" class="w-full" :class="{ 'p-invalid': errors.email }" />
+        <form @submit.prevent="handleLogin" class="space-y-4 mt-4">
+          <div class="flex flex-col gap-2 w-full">
+            <FloatLabel>
+              <InputText id="email" v-model="email" type="email" class="w-full"
+                :class="{ 'p-invalid': errors.email }" />
+              <label for="email">Email</label>
+            </FloatLabel>
             <small class="text-red-500">{{ errors.email }}</small>
           </div>
 
           <div class="flex flex-col gap-2">
-            <label for="password">Wachtwoord</label>
-            <Password v-model="password" :feedback="false" class="w-full" :class="{ 'p-invalid': errors.password }" />
+            <FloatLabel>
+              <Password input-id="password" v-model="password" :feedback="false"
+                :class="{ 'p-invalid': errors.password }" toggle-mask fluid />
+              <label for="password">Wachtwoord</label>
+            </FloatLabel>
             <small class="text-red-500">{{ errors.password }}</small>
           </div>
 
