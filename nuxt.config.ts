@@ -13,7 +13,7 @@ export default defineNuxtConfig({
 			},
 		},
 	},
-	css: ["~/assets/css/main.css"],
+	css: ["~/assets/css/main.css", "~/node_modules/primeicons/primeicons.css"],
 	postcss: {
 		plugins: {
 			tailwindcss: {},

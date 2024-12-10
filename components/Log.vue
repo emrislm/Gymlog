@@ -1,9 +1,8 @@
 <template>
-  <Card v-if="logs.length > 0" v-for="log in logs" class="border cursor-pointer hover:transition-colors duration-200"
-    :style="{
-      borderColor: `color-mix(in srgb, ${log.expand.exercise.expand.body_part.color} 50%, black)`,
-      '--hover-color': `color-mix(in srgb, ${log.expand.exercise.expand.body_part.color} 20%, black)`,
-    }" :class="['hover:!bg-[var(--hover-color)]']" :key="log.id" @click="handleDeleteLog(log.id)">
+  <Card v-if="logs.length > 0" v-for="log in logs" class="border hover:transition-colors duration-200" :style="{
+    borderColor: `color-mix(in srgb, ${log.expand.exercise.expand.body_part.color} 50%, black)`,
+    '--hover-color': `color-mix(in srgb, ${log.expand.exercise.expand.body_part.color} 15%, black)`,
+  }" :class="['hover:!bg-[var(--hover-color)]']" :key="log.id">
     <template #title>
       <div class="flex justify-between mb-2">
         <span class="truncate mr-2">{{ log.expand.exercise.name }}</span>
@@ -12,7 +11,7 @@
       </div>
     </template>
     <template #content>
-      <div class="flex flex-col gap-2">
+      <div class="flex flex-col gap-2 mb-6">
         <div class="flex justify-between">
           <span>Gewicht</span>
           <span>{{ log.weight }} kg</span>
@@ -25,6 +24,10 @@
           <span>Reps</span>
           <span>{{ log.reps }}</span>
         </div>
+      </div>
+
+      <div class="flex justify-end">
+        <i class="pi pi-trash cursor-pointer" @click="handleDeleteLog(log.id)" style="color: red;"></i>
       </div>
     </template>
   </Card>
@@ -45,7 +48,7 @@ const emit = defineEmits<{
   'refresh-logs': [];
 }>();
 
-const { pb, getLogs, deleteLog } = await usePB();
+const { deleteLog } = await usePB();
 
 const showConfirmDeleteLog = ref(false);
 let selectedLogId = ref<string | null>(null);
