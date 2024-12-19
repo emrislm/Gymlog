@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-const { logout, user, pb } = await usePB();
+const { logout, pb } = await usePB();
 
 const items = ref<any[]>([
   {
@@ -24,11 +24,11 @@ const items = ref<any[]>([
     root: true,
     command: () => navigateTo("/")
   },
-  {
-    label: 'Mijn PRs',
-    root: true,
-    command: () => navigateTo("/personalrecords")
-  },
+  /*   {
+      label: 'Mijn PRs',
+      root: true,
+      command: () => navigateTo("/personalrecords")
+    }, */
   {
     label: 'Logout',
     root: true,
