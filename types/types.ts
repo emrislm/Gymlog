@@ -10,6 +10,7 @@ export interface Log {
 	sets: number;
 	user: string;
 	weight: number;
+	remarks: string;
 }
 
 export interface BodyPart {

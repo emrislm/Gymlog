@@ -18,8 +18,8 @@
       <div class="flex flex-col">
         <div class="grid grid-cols-2 items-center">
           <span>Gewicht (kg)</span>
-          <InputNumber v-model="logModel.weight" :minFractionDigits="0" :invalid="logModel.weight === 0"
-            :maxFractionDigits="2" inputId="weight" size="small" :useGrouping="false" locale="nl-BE" fluid />
+          <InputNumber v-model="logModel.weight" locale="nl-BE" :minFractionDigits="0" :invalid="logModel.weight === 0"
+            :maxFractionDigits="2" inputId="weight" size="small" :useGrouping="false" fluid />
         </div>
         <small class="text-red-500">{{ errors.weight }}</small>
       </div>
@@ -27,7 +27,7 @@
       <div class="flex flex-col">
         <div class="grid grid-cols-2 items-center">
           <span>Sets</span>
-          <InputNumber v-model="logModel.sets" inputId="sets" size="small" :invalid="logModel.sets === 0"
+          <InputNumber v-model="logModel.sets" locale="nl-BE" inputId="sets" size="small" :invalid="logModel.sets === 0"
             :useGrouping="false" fluid />
         </div>
         <small class="text-red-500">{{ errors.sets }}</small>
@@ -36,10 +36,14 @@
       <div class="flex flex-col">
         <div class="grid grid-cols-2 items-center">
           <span>Reps</span>
-          <InputNumber v-model="logModel.reps" inputId="reps" size="small" :invalid="logModel.reps === 0"
+          <InputNumber v-model="logModel.reps" locale="nl-BE" inputId="reps" size="small" :invalid="logModel.reps === 0"
             :useGrouping="false" fluid />
         </div>
         <small class="text-red-500">{{ errors.reps }}</small>
+      </div>
+
+      <div class="flex flex-col">
+        <Textarea v-model="logModel.remarks" auto-resize size="small" placeholder="Opmerkingen..." rows="3" />
       </div>
     </div>
 

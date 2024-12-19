@@ -83,6 +83,7 @@ export const usePB = async () => {
 
 	const addLog = async (log: any) => {
 		try {
+			/* console.log(log); */
 			await pb.collection("logs").create(log);
 			return { success: true };
 		} catch (error) {
@@ -111,7 +112,7 @@ export const usePB = async () => {
 	const getExercises = async () => {
 		try {
 			const records = await pb.collection("exercises").getFullList({
-				sort: "-created",
+				sort: "body_part.name",
 				expand: "body_part",
 			});
 

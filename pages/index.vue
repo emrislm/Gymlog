@@ -4,16 +4,20 @@
       <h1 class="text-2xl font-bold">Mijn logs</h1>
     </div>
     <div class="flex justify-between items-center mb-4">
-      <DatePicker v-model="filterDate" size="small" showButtonBar dateFormat="dd/mm/yy">
-        <template #date="slotProps">
-          <strong
-            v-if="logs.some(log => isSameDay(new Date(log.date), new Date(slotProps.date.year, slotProps.date.month, slotProps.date.day)))"
-            style="color: cyan;">
-            {{ slotProps.date.day }}
-          </strong>
-          <template v-else>{{ slotProps.date.day }}</template>
-        </template>
-      </DatePicker>
+      <div class="flex gap-4 items-center">
+        <DatePicker v-model="filterDate" showButtonBar dateFormat="dd/mm/yy">
+          <template #date="slotProps">
+            <strong
+              v-if="logs.some(log => isSameDay(new Date(log.date), new Date(slotProps.date.year, slotProps.date.month, slotProps.date.day)))"
+              style="color: cyan;">
+              {{ slotProps.date.day }}
+            </strong>
+            <template v-else>{{ slotProps.date.day }}</template>
+          </template>
+        </DatePicker>
+
+        <Button icon="pi pi-sync" severity="contrast" size="small" rounded variant="outlined" @click="getUserLogs" />
+      </div>
       <Button label="Nieuwe log" @click="showNewLog = true" />
     </div>
     <div v-if="!isLoading" class="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
@@ -50,7 +54,8 @@ const newLogObject = ref<Log>({
   reps: 0,
   sets: 0,
   user: pb.authStore.record?.id || '',
-  weight: 0
+  weight: 0,
+  remarks: '',
 });
 
 /* COMPUTED PROPERTIES */
@@ -68,11 +73,21 @@ const filteredLogs = computed(() => {
 });
 
 /* FUNCTIONS */
+const stripHtml = (html: string) => {
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html;
+  return tmp.textContent || tmp.innerText || '';
+};
+
 const getUserLogs = async () => {
   isLoading.value = true;
+  logs.value = [];
   const logsResult = await getLogs(pb.authStore.record?.id || '');
   if (logsResult.success) {
-    logs.value = logsResult.data;
+    logs.value = logsResult.data.map(log => ({
+      ...log,
+      remarks: log.remarks ? stripHtml(log.remarks) : ''
+    }));
     isLoading.value = false;
   }
   else console.error(logsResult.error);
@@ -99,7 +114,8 @@ const saveLog = async () => {
     reps: 0,
     sets: 0,
     user: pb.authStore.record?.id || '',
-    weight: 0
+    weight: 0,
+    remarks: '',
   };
 };
 

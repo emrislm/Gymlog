@@ -13,16 +13,20 @@
     <template #content>
       <div class="flex flex-col gap-2 mb-6">
         <div class="flex justify-between">
-          <span>Gewicht</span>
+          <span class="font-semibold mr-2">Gewicht</span>
           <span>{{ log.weight }} kg</span>
         </div>
         <div class="flex justify-between">
-          <span>Sets</span>
+          <span class="font-semibold mr-2">Sets</span>
           <span>{{ log.sets }}</span>
         </div>
         <div class="flex justify-between">
-          <span>Reps</span>
+          <span class="font-semibold mr-2">Reps</span>
           <span>{{ log.reps }}</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="font-semibold mr-2">Opmerking</span>
+          <span class="truncate italic">{{ log.remarks }}</span>
         </div>
       </div>
 
