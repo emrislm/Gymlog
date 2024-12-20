@@ -1,47 +1,47 @@
 export interface Log {
-	collectionId?: string;
-	collectionName?: string;
-	created?: string;
-	id?: string;
-	updated?: string;
-	date: string;
-	exercise: string;
-	reps: number;
-	sets: number;
-	user: string;
-	weight: number;
-	remarks: string;
+	collectionId?: string | "";
+	collectionName?: string | "";
+	created?: string | "";
+	id?: string | "";
+	updated?: string | "";
+	date?: string | "";
+	exercise?: string | "";
+	reps?: number | 0;
+	sets?: number | 0;
+	user?: string | "";
+	weight?: number | 0;
+	remarks?: string | "";
 }
 
 export interface BodyPart {
-	collectionId?: string;
-	collectionName?: string;
-	created?: string;
-	updated?: string;
-	id?: string;
-	name: string;
-	color: string;
+	collectionId?: string | null;
+	collectionName?: string | null;
+	created?: string | null;
+	updated?: string | null;
+	id?: string | null;
+	name: string | null;
+	color: string | null;
 }
 
 export interface Exercise {
-	body_part: string;
-	collectionId?: string;
-	collectionName?: string;
-	created?: string;
-	id?: string;
-	name: string;
-	updated?: string;
+	body_part: string | null;
+	collectionId?: string | null;
+	collectionName?: string | null;
+	created?: string | null;
+	id?: string | null;
+	name: string | null;
+	updated?: string | null;
 }
 
 export interface PersonalRecord {
-	collectionId: string;
-	collectionName?: string;
-	created?: string;
-	updated?: string;
-	id?: string;
-	date: string;
-	exercise: string;
-	reps: number;
-	user: string;
-	weight: number;
+	collectionId: string | null;
+	collectionName?: string | null;
+	created?: string | null;
+	updated?: string | null;
+	id?: string | null;
+	date: string | null;
+	exercise: string | null;
+	reps: number | 0;
+	user: string | null;
+	weight: number | 0;
 }
