@@ -11,7 +11,7 @@
       </div>
     </template>
     <template #content>
-      <div class="flex flex-col gap-2 mb-6">
+      <div class="flex flex-col gap-2 mb-2">
         <div class="flex justify-between">
           <span class="font-semibold mr-2">Gewicht</span>
           <span>{{ log.weight }} kg</span>
@@ -26,10 +26,11 @@
         </div>
         <div class="flex justify-between">
           <span class="font-semibold mr-2">Opmerking</span>
-          <span class="truncate italic">{{ log.remarks }}</span>
+          <span class="truncate italic">{{ log.remarks ? log.remarks : '/' }}</span>
         </div>
       </div>
-
+    </template>
+    <template #footer>
       <div class="flex justify-end">
         <i class="pi pi-trash cursor-pointer" @click="handleDeleteLog(log.id)" style="color: red;"></i>
       </div>

@@ -4,7 +4,7 @@
       <h1 class="text-2xl font-bold">Mijn logs</h1>
     </div>
     <div class="flex justify-between items-center mb-4">
-      <div class="flex gap-4 items-center">
+      <div class="flex gap-2 sm:gap-4 items-center">
         <DatePicker v-model="filterDate" showButtonBar dateFormat="dd/mm/yy">
           <template #date="slotProps">
             <strong
@@ -16,9 +16,9 @@
           </template>
         </DatePicker>
 
-        <Button icon="pi pi-sync" severity="contrast" size="small" rounded variant="outlined" @click="getUserLogs" />
+        <Button icon="pi pi-sync" severity="contrast" rounded variant="outlined" @click="getUserLogs" />
       </div>
-      <Button label="Nieuwe log" @click="showNewLog = true" />
+      <Button icon="pi pi-plus" @click="showNewLog = true" />
     </div>
     <div v-if="!isLoading" class="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       <Log :logs="filteredLogs" @refresh-logs="getUserLogs" />
@@ -48,15 +48,7 @@ const exercises = ref<any[]>([]);
 
 const filterDate = ref<Date>(new Date());
 
-const newLogObject = ref<Log>({
-  date: new Date().toISOString().toString(),
-  exercise: '',
-  reps: 0,
-  sets: 0,
-  user: pb.authStore.record?.id || '',
-  weight: 0,
-  remarks: '',
-});
+const newLogObject = ref<Log>({});
 
 /* COMPUTED PROPERTIES */
 const filteredLogs = computed(() => {
