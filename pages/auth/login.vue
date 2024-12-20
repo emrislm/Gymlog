@@ -25,7 +25,7 @@
           </div>
 
           <div class="flex flex-col gap-4">
-            <Button type="submit" label="Login" class="w-full" />
+            <Button type="submit" label="Login" class="w-full" :loading="isLoading" />
             <div class="text-center">
               <NuxtLink to="/auth/register" class="text-blue-500 hover:underline">
                 Heb je nog geen account? Registreer
@@ -47,19 +47,28 @@ const { login } = await usePB();
 const email = ref("");
 const password = ref('');
 const errors = ref({ email: '', password: '' });
+const isLoading = ref(false);
 
 const handleLogin = async () => {
+  isLoading.value = true;
+
   // Reset errors
   errors.value = { email: '', password: '' };
 
   // Validate
   if (!email.value) errors.value.email = 'Email is vereist';
   if (!password.value) errors.value.password = 'Wachtwoord is vereist';
-  if (errors.value.email || errors.value.password) return;
+  if (errors.value.email || errors.value.password) {
+    isLoading.value = false;
+    return;
+  }
 
   const result = await login(email.value, password.value);
   if (!result.success) {
     errors.value.password = result.error ?? 'Login is niet gelukt';
+    isLoading.value = false;
+    return;
   }
+  isLoading.value = false;
 };
 </script>

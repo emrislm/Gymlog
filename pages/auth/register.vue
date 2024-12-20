@@ -9,7 +9,7 @@
           <div class="flex flex-col gap-2">
             <FloatLabel>
               <InputText id="name" v-model="name" class="w-full" :class="{ 'p-invalid': errors.name }" />
-              <label for="name">Naam</label>
+              <label for="name">Voornaam Naam</label>
             </FloatLabel>
             <small class="text-red-500">{{ errors.name }}</small>
           </div>
@@ -42,7 +42,7 @@
           </div>
 
           <div class="flex flex-col gap-4">
-            <Button type="submit" label="Registreer" class="w-full" />
+            <Button type="submit" label="Registreer" :loading="isLoading" class="w-full" />
             <div class="text-center">
               <NuxtLink to="/auth/login" class="text-blue-500 hover:underline">
                 Heb je al een account? Login
@@ -65,6 +65,7 @@ const name = ref('');
 const email = ref('');
 const password = ref('');
 const passwordConfirm = ref('');
+const isLoading = ref(false);
 const errors = ref({
   name: '',
   email: '',
@@ -73,6 +74,8 @@ const errors = ref({
 });
 
 const handleRegister = async () => {
+  isLoading.value = true;
+
   // Reset errors
   errors.value = {
     name: '',
@@ -86,14 +89,18 @@ const handleRegister = async () => {
   if (!email.value) errors.value.email = 'Email is vereist';
   if (!password.value) errors.value.password = 'Wachtwoord is vereist';
   if (!passwordConfirm.value) errors.value.passwordConfirm = 'Wachtwoord bevestiging is vereist';
-  if (password.value !== passwordConfirm.value) {
-    errors.value.passwordConfirm = 'Wachtwoorden komen niet overeen';
+  if (password.value !== passwordConfirm.value) errors.value.passwordConfirm = 'Wachtwoorden komen niet overeen';
+  if (errors.value.name || errors.value.email || errors.value.password || errors.value.passwordConfirm) {
+    isLoading.value = false;
+    return;
   }
-  if (errors.value.name || errors.value.email || errors.value.password || errors.value.passwordConfirm) return;
 
   const result = await register(name.value, email.value, password.value, passwordConfirm.value);
   if (!result.success) {
     errors.value.password = result.error ?? 'Registratie is niet gelukt';
+    isLoading.value = false;
+    return;
   }
+  isLoading.value = false;
 };
 </script>
