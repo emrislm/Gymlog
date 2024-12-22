@@ -94,6 +94,8 @@ const getAllExercises = async () => {
 
 const saveLog = async () => {
   newLogObject.value.exercise = selectedExercise.value.value;
+  newLogObject.value.user = pb.authStore.record?.id;
+  newLogObject.value.date = new Date().toISOString().toString();
 
   await addLog(newLogObject.value);
   await getUserLogs();
