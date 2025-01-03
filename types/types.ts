@@ -45,3 +45,21 @@ export interface PersonalRecord {
 	user: string | null;
 	weight: number | 0;
 }
+
+export interface ExerciseStats {
+	id?: string | "";
+	exercise?: string | "";
+	bodyPart: string | "";
+	bodyPartColor: string | "";
+	totalSets: number | 0;
+	totalReps: number | 0;
+	weights: number[] | [0];
+	increaseInWeight: number | 0;
+}
+
+export interface BodyPartStats {
+	id: string | "";
+	bodyPart: string | "";
+	color: string | "";
+	totalSets: number | 0;
+}

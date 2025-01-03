@@ -1,7 +1,9 @@
 import PocketBase from "pocketbase";
 import type { Log } from "~/types/types";
+import { getStartOfWeekDates } from "~/types/helper";
 
 const pb = new PocketBase("https://gymlog.pockethost.io/");
+pb.autoCancellation(false);
 
 export const usePB = async () => {
 	const user = useState<any>("user", () => null);
@@ -69,6 +71,26 @@ export const usePB = async () => {
 				sort: "-date",
 				expand: "exercise.body_part",
 				filter: `user = "${userId}"`,
+			});
+			return { success: true, data: records as Log[] };
+		} catch (error) {
+			console.error("Error fetching logs", error);
+			return {
+				success: false,
+				error: error instanceof Error ? error.message : "Kon logs niet ophalen",
+				data: [] as Log[],
+			};
+		}
+	};
+	const getLogsOfCurrentWeek = async (userId: string) => {
+		try {
+			const startOfWeek = getStartOfWeekDates();
+			/* console.log(dates); */
+
+			const records = await pb.collection("logs").getFullList({
+				sort: "-date",
+				expand: "exercise.body_part",
+				filter: `user = "${userId}" && date >= "${startOfWeek.thisWeek}" && date < "${startOfWeek.nextWeek}"`,
 			});
 			return { success: true, data: records as Log[] };
 		} catch (error) {
@@ -148,6 +170,7 @@ export const usePB = async () => {
 		register,
 		logout,
 		getLogs,
+		getLogsOfCurrentWeek,
 		addLog,
 		deleteLog,
 		getExercises,

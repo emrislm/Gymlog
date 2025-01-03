@@ -2,7 +2,7 @@
   <Card v-if="logs.length > 0" v-for="log in logs" class="border hover:transition-colors duration-200" :style="{
     borderColor: `color-mix(in srgb, ${log.expand.exercise.expand.body_part.color} 50%, black)`,
     '--hover-color': `color-mix(in srgb, ${log.expand.exercise.expand.body_part.color} 15%, black)`,
-  }" :class="['hover:!bg-[var(--hover-color)]']" :key="log.id">
+  }" :class="['hover:!bg-[var(--hover-color)]']" @click="handleDeleteLog(log.id)" :key="log.id">
     <template #title>
       <div class="flex justify-between mb-2">
         <span class="truncate mr-2">{{ log.expand.exercise.name }}</span>
@@ -30,11 +30,11 @@
         </div>
       </div>
     </template>
-    <template #footer>
+    <!-- <template #footer>
       <div class="flex justify-end">
         <i class="pi pi-trash cursor-pointer" @click="handleDeleteLog(log.id)" style="color: red;"></i>
       </div>
-    </template>
+    </template> -->
   </Card>
   <div v-else class="flex justify-center">
     <span class="text-lg font-semibold">Geen loggen gevonden voor deze dag</span>
