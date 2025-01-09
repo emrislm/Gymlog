@@ -34,9 +34,11 @@
 <script setup lang="ts">
 /* IMPORTS */
 import type { Log } from '@/types/types';
+import { useEventBus } from '@/composables/useEventBus';
 
 /* CONSTANTS */
 const { pb, getLogs, addLog, getExercises } = await usePB();
+const { refreshStats } = useEventBus();
 const isLoading = ref(true);
 const logs = ref<any[]>([]);
 const showNewLog = ref(false);
@@ -97,6 +99,7 @@ const saveLog = async () => {
 
   await addLog(newLogObject.value);
   await getUserLogs();
+  refreshStats();
 
   showNewLog.value = false;
   selectedExercise.value = {};

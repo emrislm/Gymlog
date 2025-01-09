@@ -15,11 +15,24 @@
 /* IMPORTS */
 import type { BodyPartStats } from '@/types/types';
 import { calculateStatsPerBodyPart } from '~/types/helper';
+import { useEventBus } from '~/composables/useEventBus';
 
 /* CONSTANTS */
 const { pb, getLogsOfCurrentWeek } = await usePB();
+const { onRefreshStats } = useEventBus();
 const isLoading = ref(true);
 const stats = ref<BodyPartStats[]>([]);
+
+onMounted(() => {
+  const cleanup = onRefreshStats(() => {
+    getLogsOfThisWeek();
+  });
+
+  // Cleanup event listener when component is unmounted
+  onUnmounted(() => {
+    cleanup();
+  });
+});
 
 /* COMPUTED PROPERTIES */
 
