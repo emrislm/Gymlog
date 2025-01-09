@@ -87,10 +87,10 @@ const handleCancel = () => {
   // Reset errors
   errors.value = { exercise: '', weight: '', sets: '', reps: '' };
 
-  emit('update:visible', false)
+  emit('update:visible', false);
 };
 
-const handleSave = () => {
+const handleSave = async () => {
   // Reset errors
   errors.value = { exercise: '', weight: '', sets: '', reps: '' };
 
@@ -102,5 +102,6 @@ const handleSave = () => {
   if (errors.value.exercise || errors.value.weight || errors.value.sets || errors.value.reps) return;
 
   emit('save');
+  handleCancel();
 };
 </script>

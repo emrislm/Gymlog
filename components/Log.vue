@@ -45,6 +45,8 @@
 </template>
 
 <script setup lang="ts">
+import { useEventBus } from '@/composables/useEventBus';
+
 defineProps<{
   logs: any[];
 }>();
@@ -54,6 +56,7 @@ const emit = defineEmits<{
 }>();
 
 const { deleteLog } = await usePB();
+const { refreshStats } = useEventBus();
 
 const showConfirmDeleteLog = ref(false);
 let selectedLogId = ref<string | null>(null);
@@ -69,6 +72,7 @@ const confirmDeleteLog = async () => {
 
     await deleteLog(selectedLogId.value);
     emit('refresh-logs');
+    refreshStats();
 
     showConfirmDeleteLog.value = false;
     selectedLogId.value = null;
