@@ -102,6 +102,29 @@ export const usePB = async () => {
 			};
 		}
 	};
+	const getLogsByDate = async (userId: string, date: number) => {
+		try {
+			let beginOfDay = new Date(date);
+			beginOfDay.setHours(0, 0, 0, 0);
+
+			let endOfDay = new Date(beginOfDay);
+			endOfDay.setDate(beginOfDay.getDate() + 1);
+
+			const records = await pb.collection("logs").getFullList({
+				sort: "-date",
+				expand: "exercise.body_part",
+				filter: `user = "${userId}" && date >= "${beginOfDay.toISOString()}" && date < "${endOfDay.toISOString()}"`,
+			});
+			return { success: true, data: records as Log[] };
+		} catch (error) {
+			console.error("Error fetching logs", error);
+			return {
+				success: false,
+				error: error instanceof Error ? error.message : "Kon logs niet ophalen",
+				data: [] as Log[],
+			};
+		}
+	};
 
 	const addLog = async (log: any) => {
 		try {
@@ -171,6 +194,7 @@ export const usePB = async () => {
 		logout,
 		getLogs,
 		getLogsOfCurrentWeek,
+		getLogsByDate,
 		addLog,
 		deleteLog,
 		getExercises,
