@@ -18,8 +18,10 @@
       <div class="flex flex-col">
         <div class="grid grid-cols-2 items-center">
           <span>Gewicht (kg)</span>
-          <InputNumber v-model="logModel.weight" locale="nl-BE" :minFractionDigits="0" :invalid="logModel.weight === 0"
-            :maxFractionDigits="2" inputId="weight" size="small" :useGrouping="false" fluid />
+          <!-- <InputNumber v-model="logModel.weight" locale="nl-BE" :maxFractionDigits="2" :invalid="logModel.weight === 0"
+            inputId="weight" size="small" :useGrouping="false" fluid /> -->
+          <InputText v-model="logModel.weight" type="text" size="small" />
+
         </div>
         <small class="text-red-500">{{ errors.weight }}</small>
       </div>

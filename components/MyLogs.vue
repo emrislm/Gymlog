@@ -107,10 +107,10 @@ const saveLog = async () => {
   newLogObject.value = {
     date: new Date().toISOString().toString(),
     exercise: '',
-    reps: 0,
-    sets: 0,
+    reps: null,
+    sets: null,
     user: pb.authStore.record?.id || '',
-    weight: 0,
+    weight: null,
     remarks: '',
   };
 };

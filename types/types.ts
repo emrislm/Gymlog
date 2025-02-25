@@ -6,10 +6,10 @@ export interface Log {
 	updated?: string | "";
 	date?: string | "";
 	exercise?: string | "";
-	reps?: number | 0;
-	sets?: number | 0;
+	reps?: number | null;
+	sets?: number | null;
 	user?: string | "";
-	weight?: number | 0;
+	weight?: string | null;
 	remarks?: string | "";
 }
 
